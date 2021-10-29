@@ -1,16 +1,13 @@
-package com.example.obligatorisktwistermd.Repository
+package repository
 
 import androidx.lifecycle.MutableLiveData
-import com.example.obligatorisktwistermd.Models.User
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
+import kotlin.math.log
 
 class AuthRepository {
 
-    private lateinit var auth: FirebaseAuth
+    private var auth: FirebaseAuth = FirebaseAuth.getInstance()
     val userInfoData: MutableLiveData<FirebaseUser> = MutableLiveData()
     val loggedOutData: MutableLiveData<Boolean> = MutableLiveData()
     val errorMessage: MutableLiveData<String> = MutableLiveData()
@@ -25,9 +22,11 @@ class AuthRepository {
             task ->
             if (task.isSuccessful){
                 userInfoData.value = FirebaseAuth.getInstance().currentUser
+                loggedOutData.value = false
             }
             else {
                 errorMessage.value = task.exception?.message
+                loggedOutData.value = true
             }
 
         }
@@ -39,9 +38,11 @@ class AuthRepository {
             task ->
             if (task.isSuccessful){
                 userInfoData.value = FirebaseAuth.getInstance().currentUser
+                loggedOutData.value = false
             }
             else{
                 errorMessage.value = task.exception?.message
+                loggedOutData.value = true
             }
         }
 

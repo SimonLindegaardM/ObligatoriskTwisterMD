@@ -9,15 +9,24 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import com.example.obligatorisktwistermd.databinding.ActivityMainBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import models.AuthViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
+    private val authViewModel: AuthViewModel by viewModels()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -28,15 +37,40 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
+//        binding.fab.setOnClickListener { view ->
+//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                .setAction("Action", null).show()
+//        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
+//        authViewModel.userInfoData.observe(this, {user ->
+//            if (user == null) {
+//                val menuItem = menu.findItem(R.id.action_signout)
+//                menuItem.isVisible = false
+//
+//            }
+//        })
+        authViewModel.loggedOutData.value = true
+//        authViewModel.loggedOutData.observe(this, {user ->
+//            if (user == true){
+//                val menuItem = menu.findItem(R.id.action_signout)
+//                menuItem.isVisible = false
+//            }
+//        })
+
+        if (FirebaseAuth.getInstance().currentUser == null) {
+            authViewModel.userInfoData.observe(this, {user ->
+                if (user == null){
+                    val menuItem = menu.findItem(R.id.action_signout)
+                    menuItem.isVisible = false
+                }
+            })
+//             TODO does not update after login: need observable property (ViewModel)
+
+        }
         return true
     }
 
@@ -46,6 +80,17 @@ class MainActivity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.action_settings -> true
+            R.id.action_signout -> {
+                if (authViewModel.userInfoData.value != null) {
+                    authViewModel.logOut()
+                    val navController = findNavController(R.id.nav_host_fragment_content_main)
+                    navController.popBackStack(R.id.signinFragment, false)
+                    // https://developer.android.com/codelabs/android-navigation#6
+                } else {
+                    Snackbar.make(binding.root, "Cannot sign out", Snackbar.LENGTH_LONG).show()
+                }
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
