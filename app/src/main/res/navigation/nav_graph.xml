@@ -6,9 +6,18 @@
     app:startDestination="@id/signinFragment">
 
     <fragment
+        android:id="@+id/signinFragment"
+        android:name="com.example.obligatorisktwistermd.SigninFragment"
+        android:label="Login Page"
+        tools:layout="@layout/fragment_signin" >
+        <action
+            android:id="@+id/action_signinFragment_to_messageFragment"
+            app:destination="@id/messageFragment" />
+    </fragment>
+    <fragment
         android:id="@+id/messageFragment"
         android:name="com.example.obligatorisktwistermd.MessageFragment"
-        android:label="fragment_messages">
+        android:label="Messages">
         <action
             android:id="@+id/action_messageFragment_to_commentFragment"
             app:destination="@id/commentFragment" />
@@ -16,7 +25,7 @@
     <fragment
         android:id="@+id/commentFragment"
         android:name="com.example.obligatorisktwistermd.CommentFragment"
-        android:label="fragment_comments"
+        android:label="Comments"
         tools:layout="@layout/fragment_comments">
         <argument android:name="message"
             app:argType="models.Message" />
@@ -25,13 +34,5 @@
             app:destination="@id/messageFragment" />
 
     </fragment>
-    <fragment
-        android:id="@+id/signinFragment"
-        android:name="com.example.obligatorisktwistermd.SigninFragment"
-        android:label="fragment_signin"
-        tools:layout="@layout/fragment_signin" >
-        <action
-            android:id="@+id/action_signinFragment_to_messageFragment"
-            app:destination="@id/messageFragment" />
-    </fragment>
+
 </navigation>

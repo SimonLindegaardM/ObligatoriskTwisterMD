@@ -1,16 +1,22 @@
 package com.example.obligatorisktwistermd
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.obligatorisktwistermd.databinding.FragmentSigninBinding
 import com.google.firebase.auth.FirebaseUser
 import androidx.lifecycle.Observer;
 import models.AuthViewModel
+import android.app.Activity
+
+
+
 
 
 class SigninFragment : Fragment() {
@@ -21,16 +27,16 @@ class SigninFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
-        //authViewModel = ViewModelProviders.of(this).get(authViewModel::class.java)
-        authViewModel.userInfoData.observe(this,{user ->
-                if (user != null)
-                {
-                    findNavController().navigate(R.id.action_signinFragment_to_messageFragment)
-                }
-        })
-        authViewModel.errorMessage.observe(this, {message ->
-            binding.errorMessageView.text = message
-        })
+
+//        authViewModel.userInfoData.observe(this,{user ->
+//                if (user != null)
+//                {
+//                    findNavController().navigate(R.id.action_signinFragment_to_messageFragment)
+//                }
+//        })
+//        authViewModel.errorMessage.observe(this, {message ->
+//            binding.errorMessageView.text = message
+//        })
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,7 +67,10 @@ class SigninFragment : Fragment() {
                 return@setOnClickListener
             }
             authViewModel.signIn(email, password)
-
+            if (authViewModel.loggedOutData.value != true){
+                findNavController().navigate(R.id.action_signinFragment_to_messageFragment)
+            }
+            hideKeyboard(activity as MainActivity)
 
         }
         binding.buttonCreateUser.setOnClickListener{
@@ -76,6 +85,8 @@ class SigninFragment : Fragment() {
                 return@setOnClickListener
             }
             authViewModel.createUser(email, password)
+
+            hideKeyboard(activity as MainActivity)
         }
 
         //authViewModel.errorMessage.observe(viewLifecycleOwner) {
@@ -83,9 +94,24 @@ class SigninFragment : Fragment() {
         //}
 
     }
+    fun hideKeyboard(activity: Activity) {
+        val inputManager = activity
+            .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
+        // check if no view has focus:
+        val currentFocusedView = activity.currentFocus
+        if (currentFocusedView != null) {
+            inputManager.hideSoftInputFromWindow(
+                currentFocusedView.windowToken,
+                InputMethodManager.HIDE_NOT_ALWAYS
+            )
+        }
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+
     }
 }

@@ -33,7 +33,6 @@ class MessageFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-    private lateinit var mDetector: GestureDetectorCompat
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +42,7 @@ class MessageFragment : Fragment() {
 
         _binding = FragmentMessagesBinding.inflate(inflater, container, false)
         return binding.root
+
 
     }
 
@@ -59,6 +59,10 @@ class MessageFragment : Fragment() {
         messageViewModel.reload()
         binding.fab.setOnClickListener{ view ->
             showDialog()
+        }
+        binding.swipeRefresh.setOnRefreshListener{
+            messageViewModel.reload()
+            binding.swipeRefresh.isRefreshing = false
         }
 
     }

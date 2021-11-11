@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
 //
 //            }
 //        })
-        authViewModel.loggedOutData.value = true
+
 //        authViewModel.loggedOutData.observe(this, {user ->
 //            if (user == true){
 //                val menuItem = menu.findItem(R.id.action_signout)
@@ -64,7 +64,6 @@ class MainActivity : AppCompatActivity() {
                     menuItem.isVisible = false
                 }
             })
-//             TODO does not update after login: need observable property (ViewModel)
 
         }
         return true
@@ -75,10 +74,10 @@ class MainActivity : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_settings -> true
             R.id.action_signout -> {
                 if (Firebase.auth.currentUser != null) {
-                    authViewModel.logOut()
+                    Firebase.auth.signOut()
+                    authViewModel.loggedOutData.value = true
                     val navController = findNavController(R.id.nav_host_fragment_content_main)
                     navController.popBackStack(R.id.signinFragment, false)
                 } else {
