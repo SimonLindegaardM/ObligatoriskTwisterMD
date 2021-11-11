@@ -4,12 +4,12 @@ import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.text.InputType
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.EditText
+import androidx.core.view.GestureDetectorCompat
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import models.AuthViewModel
@@ -18,6 +18,7 @@ import models.MessageAdapter
 import models.MessageViewModel
 import com.example.obligatorisktwistermd.databinding.FragmentMessagesBinding
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -32,6 +33,7 @@ class MessageFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    private lateinit var mDetector: GestureDetectorCompat
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,23 +47,19 @@ class MessageFragment : Fragment() {
     }
 
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         messageViewModel.messageLiveData.observe(viewLifecycleOwner) { messages ->
             binding.messageview.adapter = MessageAdapter<Message>(messages){
-
+                    val action = MessageFragmentDirections.actionMessageFragmentToCommentFragment(it)
+                    findNavController().navigate(action)
             }
         }
-
         messageViewModel.reload()
-
         binding.fab.setOnClickListener{ view ->
             showDialog()
         }
-
 
     }
     private fun showDialog() {
@@ -88,4 +86,5 @@ class MessageFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }

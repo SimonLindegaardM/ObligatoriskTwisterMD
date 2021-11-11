@@ -10,6 +10,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
+import androidx.fragment.app.activityViewModels
 import com.example.obligatorisktwistermd.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -20,8 +21,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-
-    private val authViewModel: AuthViewModel by viewModels()
+    private val authViewModel: AuthViewModel by viewModels<AuthViewModel>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,10 +37,6 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-//        binding.fab.setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                .setAction("Action", null).show()
-//        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -81,11 +77,10 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.action_settings -> true
             R.id.action_signout -> {
-                if (authViewModel.userInfoData.value != null) {
+                if (Firebase.auth.currentUser != null) {
                     authViewModel.logOut()
                     val navController = findNavController(R.id.nav_host_fragment_content_main)
                     navController.popBackStack(R.id.signinFragment, false)
-                    // https://developer.android.com/codelabs/android-navigation#6
                 } else {
                     Snackbar.make(binding.root, "Cannot sign out", Snackbar.LENGTH_LONG).show()
                 }

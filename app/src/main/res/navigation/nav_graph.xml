@@ -6,24 +6,24 @@
     app:startDestination="@id/signinFragment">
 
     <fragment
-        android:id="@+id/FirstFragment"
+        android:id="@+id/messageFragment"
         android:name="com.example.obligatorisktwistermd.MessageFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_messages">
-
+        android:label="fragment_messages">
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            android:id="@+id/action_messageFragment_to_commentFragment"
+            app:destination="@id/commentFragment" />
     </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.example.obligatorisktwistermd.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
-
+        android:id="@+id/commentFragment"
+        android:name="com.example.obligatorisktwistermd.CommentFragment"
+        android:label="fragment_comments"
+        tools:layout="@layout/fragment_comments">
+        <argument android:name="message"
+            app:argType="models.Message" />
         <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_commentFragment_to_messageFragment"
+            app:destination="@id/messageFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/signinFragment"
@@ -31,7 +31,7 @@
         android:label="fragment_signin"
         tools:layout="@layout/fragment_signin" >
         <action
-            android:id="@+id/action_signinFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_signinFragment_to_messageFragment"
+            app:destination="@id/messageFragment" />
     </fragment>
 </navigation>

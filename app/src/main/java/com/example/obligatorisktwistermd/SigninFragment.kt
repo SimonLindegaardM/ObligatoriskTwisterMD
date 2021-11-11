@@ -25,7 +25,7 @@ class SigninFragment : Fragment() {
         authViewModel.userInfoData.observe(this,{user ->
                 if (user != null)
                 {
-                    findNavController().navigate(R.id.action_signinFragment_to_FirstFragment)
+                    findNavController().navigate(R.id.action_signinFragment_to_messageFragment)
                 }
         })
         authViewModel.errorMessage.observe(this, {message ->

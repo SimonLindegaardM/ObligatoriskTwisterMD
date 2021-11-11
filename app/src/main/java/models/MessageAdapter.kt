@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.obligatorisktwistermd.R
 
-class MessageAdapter<T>(private val items: List<T>, private val onItemClicked: (position: Int) -> Unit) :
+class MessageAdapter<T>(private val items: List<Message>, private val onItemClicked: (message: Message) -> Unit) :
     RecyclerView.Adapter<MessageAdapter.MyViewHolder>() {
 
     override fun getItemCount(): Int {
@@ -25,9 +25,12 @@ class MessageAdapter<T>(private val items: List<T>, private val onItemClicked: (
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
         viewHolder.textView.text = items[position].toString()
+        viewHolder.textView.setOnClickListener{
+            onItemClicked(items.get(position))
+        }
     }
 
-    class MyViewHolder(itemView: View, private val onItemClicked: (position: Int) -> Unit) :
+    class MyViewHolder(itemView: View, private val onItemClicked: (message: Message) -> Unit) :
         RecyclerView.ViewHolder(itemView), View.OnClickListener {
         val textView: TextView = itemView.findViewById(R.id.messageitem)
 
@@ -37,7 +40,7 @@ class MessageAdapter<T>(private val items: List<T>, private val onItemClicked: (
 
         override fun onClick(view: View) {
             val position = bindingAdapterPosition
-            onItemClicked(position)
+            //onItemClicked(position)
         }
     }
 }

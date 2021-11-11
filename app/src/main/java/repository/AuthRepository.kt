@@ -8,9 +8,9 @@ import kotlin.math.log
 class AuthRepository {
 
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
-    val userInfoData: MutableLiveData<FirebaseUser> = MutableLiveData()
-    val loggedOutData: MutableLiveData<Boolean> = MutableLiveData()
-    val errorMessage: MutableLiveData<String> = MutableLiveData()
+    val userInfoData: MutableLiveData<FirebaseUser> = MutableLiveData<FirebaseUser>()
+    val loggedOutData: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
+    val errorMessage: MutableLiveData<String> = MutableLiveData<String>()
 
     init {
         userInfoData.value = FirebaseAuth.getInstance().currentUser
