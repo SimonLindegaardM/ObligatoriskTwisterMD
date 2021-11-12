@@ -27,7 +27,6 @@ class ExampleInstrumentedTest {
 
     @Test
     fun useAppContext() {
-        // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         assertEquals("com.example.obligatorisktwistermd", appContext.packageName)
 
@@ -38,6 +37,8 @@ class ExampleInstrumentedTest {
         onView(withId(R.id.passwordInputField))
             .perform(clearText())
             .perform(typeText("123456"))
+        onView(withId(R.id.sign_in)).perform(click());
+        Thread.sleep(1000)
         onView(withId(R.id.sign_in)).perform(click());
         Thread.sleep(1000);
         onView(withId(R.id.fab)).check(matches(isDisplayed()));

@@ -28,6 +28,8 @@ class SigninFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
 
+        authViewModel.loggedOutData.value = true
+
 //        authViewModel.userInfoData.observe(this,{user ->
 //                if (user != null)
 //                {
@@ -71,6 +73,10 @@ class SigninFragment : Fragment() {
                 findNavController().navigate(R.id.action_signinFragment_to_messageFragment)
             }
             hideKeyboard(activity as MainActivity)
+
+            authViewModel.errorMessage.observe(viewLifecycleOwner, {message ->
+            binding.errorMessageView.text = message
+        })
 
         }
         binding.buttonCreateUser.setOnClickListener{
